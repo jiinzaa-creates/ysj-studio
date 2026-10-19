@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="void">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Beat — YSJ Studio</title>
+<meta name="description" content="License an original JINZA beat. Preview the track, pick a license, add to your crate.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700;800&family=Cinzel+Decorative:wght@700;900&family=IBM+Plex+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+<link rel="icon" href="assets/logos/skull-sm.jpg">
+</head>
+<body>
+<header id="site-header"></header>
+<main class="wrap" id="beat-main">
+  <p><a href="catalog.html">← Back to catalog</a></p>
+  <div id="beat-detail"></div>
+  <div class="occult" aria-hidden="true">✦ ☽ ✦</div>
+  <section aria-labelledby="more-h">
+    <h2 id="more-h">You may also like</h2>
+    <div class="beat-grid" id="more-grid"></div>
+  </section>
+</main>
+<footer id="site-footer"></footer>
+<div id="toast" role="status" aria-live="polite"></div>
+<script src="assets/js/catalog.js"></script>
+<script src="assets/js/site.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  var slug = new URLSearchParams(location.search).get("slug");
+  var b = getBeat(slug);
+  var host = document.getElementById("beat-detail");
+  if (!b) {
+    host.innerHTML = '<div class="card"><h1>Beat not found</h1><p>This beat doesn\'t exist or isn\'t published. <a href="catalog.html">Browse the catalog</a>.</p></div>';
+    document.title = "Not found — YSJ Studio";
+    return;
+  }
+  document.title = b.title + " — YSJ Studio";
+
+  function cell(k, v) {
+    return '<div class="meta-cell"><div class="k">' + k + '</div><div class="v">' + (v == null ? "—" : v) + "</div></div>";
+  }
+  var licenseOpts = LICENSES.map(function (l, i) {
+    var price = l.priceCents == null ? "Offer only" : money(l.priceCents);
+    return (
+      '<label class="license-opt' + (l.exclusive ? " exclusive-pick" : "") + '">' +
+        '<input type="radio" name="license" value="' + l.id + '"' + (i === 0 ? " checked" : "") + ">" +
+        '<span><span class="lname">' + l.name + "</span><br>" +
+        '<span class="ldesc">' + l.deliverable + (l.exclusive ? " · <a href=\"contact.html\">Contact to negotiate</a>" : "") + "</span></span>" +
+        '<span class="lprice">' + price + "</span>" +
+      "</label>"
+    );
+  }).join("");
+
+  host.innerHTML =
+    '<div class="beat-detail">' +
+      '<div><div class="beat-cover-lg"><img src="' + b.cover + '" alt="' + b.title + ' cover art" width="800" height="800"></div></div>' +
+      "<div>" +
+        '<p class="eyebrow">✦ Produced by JINZA | YSJ Studio ✦</p>' +
+        "<h1>" + b.title + "</h1>" +
+        (b.pocket ? '<p class="credit">' + b.pocket + "</p>" : "") +
+        '<div class="meta-table">' + cell("BPM", b.bpm) + cell("Key", b.key) + cell("Genre", b.genre) + cell("Mood", b.mood) + "</div>" +
+        '<div class="player"><div class="player-row">' +
+          '<button class="play-btn" data-target="pv-main" aria-label="Play preview"><span aria-hidden="true">▶</span></button>' +
+          "<div><strong>Preview</strong><br><span class='credit'>30-second tagged preview · full files delivered after purchase</span></div>" +
+        "</div>" +
+        '<audio id="pv-main" data-preview preload="metadata" src="' + b.preview + '" controls></audio></div>' +
+        '<h2>Choose your license</h2>' +
+        '<div class="license-list" role="radiogroup" aria-label="License options">' + licenseOpts + "</div>" +
+        '<button class="btn" id="add-crate">Add to Crate</button> ' +
+        '<a class="btn ghost" href="licensing.html">Compare licenses</a>' +
+      "</div>" +
+    "</div>";
+
+  // Sync the play button state (the global click delegation in site.js handles toggling).
+  (function () {
+    var audio = document.getElementById("pv-main");
+    var btn = host.querySelector('.play-btn[data-target="pv-main"]');
+    if (btn && audio) {
+      audio.addEventListener("play", function () { btn.classList.add("playing"); btn.setAttribute("aria-label", "Pause preview"); });
+      audio.addEventListener("pause", function () { btn.classList.remove("playing"); btn.setAttribute("aria-label", "Play preview"); });
+    }
+  })();
+
+  document.getElementById("add-crate").addEventListener("click", function () {
+    var sel = host.querySelector('input[name="license"]:checked');
+    var lic = getLicense(sel.value);
+    if (lic.exclusive) {
+      // Exclusive licenses are negotiated, not self-checkout — send to contact.
+      location.href = "contact.html?topic=exclusive&beat=" + encodeURIComponent(b.slug);
+      return;
+    }
+    YSJ.addToCrate(b.slug, lic.id, this);
+  });
+
+  var more = BEATS.filter(function (x) { return x.slug !== b.slug && (x.genre === b.genre || x.featured); }).slice(0, 4);
+  if (!more.length) more = BEATS.filter(function (x) { return x.slug !== b.slug; }).slice(0, 4);
+  YSJ.renderBeatGrid(document.getElementById("more-grid"), more);
+});
+</script>
+</body>
+</html>

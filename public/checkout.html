@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="void">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Checkout — YSJ Studio</title>
+<meta name="description" content="Review your crate and check out securely with Stripe or PayPal.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700;800&family=Cinzel+Decorative:wght@700;900&family=IBM+Plex+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+<link rel="icon" href="assets/logos/skull-sm.jpg">
+</head>
+<body>
+<header id="site-header"></header>
+<main class="wrap">
+  <p class="eyebrow">✦ Secure Checkout ✦</p>
+  <h1>Your Crate</h1>
+
+  <div id="checkout-body"></div>
+
+  <!-- UI PREVIEW links (Milestone 2): lets the owner review the post-purchase pages
+       before payment wiring lands. Remove these links when M4/M5 go live. -->
+  <p class="credit" style="margin-top:2rem">UI previews: <a href="success.html">order success</a> · <a href="downloads.html">downloads</a></p>
+</main>
+<footer id="site-footer"></footer>
+<div id="toast" role="status" aria-live="polite"></div>
+<script src="assets/js/catalog.js"></script>
+<script src="assets/js/site.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  var host = document.getElementById("checkout-body");
+  function render() {
+    var crate = YSJ.readCrate();
+    if (!crate.length) {
+      host.innerHTML = '<div class="card"><h2>Your crate is empty</h2>' +
+        '<p>Add a beat to get started. <a href="catalog.html">Browse the catalog</a>.</p></div>';
+      return;
+    }
+    var total = 0;
+    var lines = crate.map(function (item, i) {
+      var b = getBeat(item.slug), l = getLicense(item.license);
+      if (!b || !l) return "";
+      total += l.priceCents || 0;
+      return '<div class="cart-line">' +
+        '<img src="' + b.cover + '" alt="" width="64" height="64">' +
+        '<div class="grow"><div class="t">' + b.title + '</div>' +
+        '<div class="s">' + l.name + " · " + l.deliverable + "</div></div>" +
+        '<div class="p">' + money(l.priceCents) + "</div>" +
+        '<button class="link-btn" data-remove="' + i + '">Remove</button></div>';
+    }).join("");
+
+    host.innerHTML =
+      '<div class="card"><h2>Order summary</h2>' + lines +
+      '<div class="totals"><div class="row grand"><span>Total</span><span>' + money(total) + "</span></div></div></div>" +
+      '<div class="card"><h2>Delivery email</h2>' +
+        '<div class="field"><label for="email">Email for delivery + license</label>' +
+        '<input type="email" id="email" placeholder="you@studio.com" autocomplete="email">' +
+        '<p class="hint">Your download link and license are sent here. Nothing else is collected.</p></div></div>' +
+      '<div class="card"><h2>Pay securely</h2>' +
+        "<p class='credit'>Payments are processed by Stripe or PayPal. YSJ Studio never sees your card number.</p>" +
+        '<div class="pay-stack">' +
+          // M4: wire to POST /api/checkout {provider:"stripe"} → Stripe Checkout session.
+          '<button class="btn" id="pay-stripe">Pay ' + money(total) + " with Stripe</button>" +
+          // M5: wire to POST /api/paypal/orders → PayPal Orders API + JS SDK capture.
+          '<button class="btn teal" id="pay-paypal">Pay with PayPal</button>' +
+        "</div>" +
+        '<div class="notice"><strong>Preview build.</strong> Checkout buttons are UI-only in Milestone 2 — ' +
+        "no payment is created. Server-side checkout + verified webhooks ship in M4 (Stripe) and M5 (PayPal).</div></div>";
+
+    host.querySelectorAll("[data-remove]").forEach(function (btn) {
+      btn.addEventListener("click", function () { YSJ.removeFromCrate(+btn.dataset.remove); render(); });
+    });
+    document.getElementById("pay-stripe").addEventListener("click", function () {
+      YSJ.toast("Stripe checkout isn't wired yet — coming in M4. Nothing was charged.");
+    });
+    document.getElementById("pay-paypal").addEventListener("click", function () {
+      YSJ.toast("PayPal checkout isn't wired yet — coming in M5. Nothing was charged.");
+    });
+  }
+  render();
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="void">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>YSJ Studio — Original production. Your next record.</title>
+<meta name="description" content="Discover and license original beats produced by JINZA. Explore multiple genres, find your sound, and bring your next record to life.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700;800&family=Cinzel+Decorative:wght@700;900&family=IBM+Plex+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+<link rel="icon" href="assets/logos/skull-sm.jpg">
+</head>
+<body>
+<header id="site-header"></header>
+<main class="wrap">
+
+  <section class="hero">
+    <div class="hero-emblem">
+      <img src="assets/logos/skull.jpg" alt="YSJ Studio psychedelic samurai skull emblem" width="900" height="900" fetchpriority="high">
+    </div>
+    <div>
+      <p class="eyebrow">✦ YSJ Studio · Beat Licensing ✦</p>
+      <h1>YSJ <span class="grad">Studio</span></h1>
+      <p class="tagline">Original production. Your next record.</p>
+      <p>Discover and license original beats produced by JINZA. Explore multiple genres, find your sound, and bring your next record to life.</p>
+      <div class="hero-ctas">
+        <a class="btn" href="catalog.html">Browse Beats</a>
+        <a class="btn ghost" href="licensing.html">License Terms</a>
+      </div>
+    </div>
+  </section>
+
+  <div class="occult" aria-hidden="true">✦ ☽ ✦</div>
+
+  <section aria-labelledby="featured-h">
+    <h2 id="featured-h">Featured Beats</h2>
+    <div class="beat-grid" id="featured-grid"></div>
+  </section>
+
+  <section aria-labelledby="new-h">
+    <h2 id="new-h">New Releases</h2>
+    <div class="beat-grid" id="new-grid"></div>
+  </section>
+
+  <section aria-labelledby="genre-h">
+    <h2 id="genre-h">Shop by Sound</h2>
+    <div class="genre-chips" id="genre-chips"></div>
+    <p><a class="btn ghost small" href="catalog.html">View full catalog →</a></p>
+  </section>
+
+</main>
+<footer id="site-footer"></footer>
+<div id="toast" role="status" aria-live="polite"></div>
+<script src="assets/js/catalog.js"></script>
+<script src="assets/js/site.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  YSJ.renderBeatGrid(document.getElementById("featured-grid"), BEATS.filter(function (b) { return b.featured; }));
+  YSJ.renderBeatGrid(document.getElementById("new-grid"), BEATS.filter(function (b) { return b.isNew; }));
+  var genres = {};
+  BEATS.forEach(function (b) { if (b.genre) genres[b.genre] = true; });
+  var chips = Object.keys(genres).map(function (g) {
+    return '<a href="catalog.html?genre=' + encodeURIComponent(g) + '">' + g + "</a>";
+  });
+  chips.push('<a href="catalog.html">All Beats</a>');
+  document.getElementById("genre-chips").innerHTML = chips.join("");
+});
+</script>
+</body>
+</html>

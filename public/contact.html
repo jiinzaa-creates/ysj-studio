@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="void">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Contact — YSJ Studio</title>
+<meta name="description" content="Contact YSJ Studio about beat licensing, exclusive offers, and support.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700;800&family=Cinzel+Decorative:wght@700;900&family=IBM+Plex+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+<link rel="icon" href="assets/logos/skull-sm.jpg">
+</head>
+<body>
+<header id="site-header"></header>
+<main class="wrap">
+  <p class="eyebrow">✦ Get in touch ✦</p>
+  <h1>Contact</h1>
+  <div class="beat-detail" style="align-items:start">
+    <div class="card">
+      <h2>Send a message</h2>
+      <!-- M3: wire this form to POST /api/contact. No backend yet — submissions are not sent. -->
+      <form id="contact-form">
+        <div class="field">
+          <label for="c-topic">Topic</label>
+          <select id="c-topic" name="topic">
+            <option value="general">General question</option>
+            <option value="exclusive">Exclusive license offer</option>
+            <option value="support">Order support</option>
+            <option value="custom">Custom production inquiry</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="c-name">Your name</label>
+          <input id="c-name" name="name" type="text" autocomplete="name" required>
+        </div>
+        <div class="field">
+          <label for="c-email">Email</label>
+          <input id="c-email" name="email" type="email" autocomplete="email" required>
+        </div>
+        <div class="field" id="beat-field" hidden>
+          <label for="c-beat">Beat</label>
+          <input id="c-beat" name="beat" type="text" readonly>
+        </div>
+        <div class="field">
+          <label for="c-msg">Message</label>
+          <textarea id="c-msg" name="message" rows="5" required placeholder="Tell us what you need…"></textarea>
+        </div>
+        <button class="btn" type="submit">Send message</button>
+      </form>
+      <div class="notice"><strong>Preview build.</strong> The contact form has no backend yet — messages aren't sent. Form handling ships in M3.</div>
+    </div>
+    <div>
+      <div class="card">
+        <h2>Elsewhere</h2>
+        <p>The fastest way to reach JINZA is a DM:</p>
+        <p><a class="btn ghost small" href="https://instagram.com/yessirjinza" target="_blank" rel="noopener">Instagram @yessirjinza</a></p>
+      </div>
+      <div class="card">
+        <h2>Exclusive offers</h2>
+        <p>Exclusive licenses are negotiated per beat — pick "Exclusive license offer" above, name the beat, and make your offer. Serious inquiries only.</p>
+      </div>
+    </div>
+  </div>
+</main>
+<footer id="site-footer"></footer>
+<div id="toast" role="status" aria-live="polite"></div>
+<script src="assets/js/catalog.js"></script>
+<script src="assets/js/site.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  // Deep-link support: contact.html?topic=exclusive&beat=doll-house
+  var params = new URLSearchParams(location.search);
+  if (params.get("topic")) {
+    var sel = document.getElementById("c-topic");
+    if ([].some.call(sel.options, function (o) { return o.value === params.get("topic"); })) sel.value = params.get("topic");
+  }
+  if (params.get("beat")) {
+    var b = getBeat(params.get("beat"));
+    document.getElementById("beat-field").hidden = false;
+    document.getElementById("c-beat").value = b ? b.title : params.get("beat");
+  }
+  document.getElementById("contact-form").addEventListener("submit", function (e) {
+    e.preventDefault();
+    YSJ.toast("Message not sent — the contact backend ships in M3. DM @yessirjinza for now.");
+  });
+});
+</script>
+</body>
+</html>

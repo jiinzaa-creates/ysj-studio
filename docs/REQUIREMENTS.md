@@ -1,7 +1,7 @@
 # Requirements checklist (from project brief)
 
 ## Pages (M2)
-- [ ] Home — branding, featured beats, new releases, genres, CTAs
+- [ ] Home — branding per docs/BRAND.md (YSJ Studio business identity, JINZA producer), featured beats, new releases, genres, CTAs
 - [ ] Catalog — search + filter, verified metadata
 - [ ] Beat detail — art, preview, title/genre/mood/BPM/key, licenses + prices
 - [ ] Checkout — summary, license select, Stripe + PayPal

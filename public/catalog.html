@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="void">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Beat Catalog — YSJ Studio</title>
+<meta name="description" content="Browse the full YSJ Studio beat catalog. Search by title, filter by genre. All beats produced by JINZA.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700;800&family=Cinzel+Decorative:wght@700;900&family=IBM+Plex+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+<link rel="icon" href="assets/logos/skull-sm.jpg">
+</head>
+<body>
+<header id="site-header"></header>
+<main class="wrap">
+  <p class="eyebrow">✦ The Catalog ✦</p>
+  <h1>Beats</h1>
+  <p>Every beat is an original JINZA production. Preview before you license — <span id="beat-count"></span> beats live.</p>
+
+  <form class="filters" id="filters" aria-label="Filter beats">
+    <div class="field">
+      <label for="q">Search</label>
+      <input type="search" id="q" name="q" placeholder="Title, e.g. red handed…" autocomplete="off">
+    </div>
+    <div class="field">
+      <label for="genre">Genre</label>
+      <select id="genre" name="genre"><option value="">All genres</option></select>
+    </div>
+    <div class="field">
+      <label for="mood">Mood</label>
+      <select id="mood" name="mood"><option value="">All moods</option></select>
+    </div>
+    <div class="field">
+      <label for="sort">Sort</label>
+      <select id="sort" name="sort">
+        <option value="featured">Featured first</option>
+        <option value="az">Title A–Z</option>
+        <option value="new">Newest first</option>
+      </select>
+    </div>
+  </form>
+
+  <div class="beat-grid" id="catalog-grid"></div>
+</main>
+<footer id="site-footer"></footer>
+<div id="toast" role="status" aria-live="polite"></div>
+<script src="assets/js/catalog.js"></script>
+<script src="assets/js/site.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  var grid = document.getElementById("catalog-grid");
+  var q = document.getElementById("q"), genreSel = document.getElementById("genre"),
+      moodSel = document.getElementById("mood"), sortSel = document.getElementById("sort");
+
+  // Populate filter options from verified (non-null) values only.
+  function uniq(key) {
+    var seen = {};
+    BEATS.forEach(function (b) { if (b[key]) b[key].split(",").forEach(function (v) { seen[v.trim()] = true; }); });
+    return Object.keys(seen).sort();
+  }
+  uniq("genre").forEach(function (g) { genreSel.add(new Option(g, g)); });
+  uniq("mood").forEach(function (m) { moodSel.add(new Option(m, m)); });
+
+  // Deep-link support: catalog.html?genre=Rage
+  var params = new URLSearchParams(location.search);
+  if (params.get("genre")) genreSel.value = params.get("genre");
+
+  function apply() {
+    var term = q.value.trim().toLowerCase();
+    var list = BEATS.filter(function (b) {
+      if (term && b.title.toLowerCase().indexOf(term) < 0) return false;
+      if (genreSel.value && b.genre !== genreSel.value) return false;
+      if (moodSel.value && !(b.mood || "").split(",").map(function (s) { return s.trim(); }).includes(moodSel.value)) return false;
+      return true;
+    });
+    if (sortSel.value === "az") list.sort(function (a, b) { return a.title.localeCompare(b.title); });
+    else if (sortSel.value === "new") list.sort(function (a, b) { return (b.isNew ? 1 : 0) - (a.isNew ? 1 : 0); });
+    else list.sort(function (a, b) { return (b.featured ? 1 : 0) - (a.featured ? 1 : 0); });
+    YSJ.renderBeatGrid(grid, list);
+    document.getElementById("beat-count").textContent = BEATS.length;
+  }
+  ["input", "change"].forEach(function (ev) {
+    document.getElementById("filters").addEventListener(ev, apply);
+  });
+  apply();
+});
+</script>
+</body>
+</html>
