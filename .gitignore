@@ -1,0 +1,32 @@
+# Secrets & local env
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Wrangler / Cloudflare
+.dev.vars
+.wrangler/
+
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+build/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Test artifacts
+coverage/
+.nyc_output/
+
+# Local sqlite for D1 dev
+*.sqlite
+*.sqlite-shm
+*.sqlite-wal
