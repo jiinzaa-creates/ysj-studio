@@ -1,0 +1,27 @@
+# JINZA Beat Store — Cloudflare Pages config
+name = "jinza-beats"
+compatibility_date = "2026-10-01"
+
+[vars]
+APP_ENV = "development"
+SITE_URL = "http://localhost:8788"
+DOWNLOAD_TOKEN_TTL_MINUTES = "30"
+DOWNLOAD_MAX_USES = "5"
+
+# --- Bindings (uncomment + fill ids when resources are created) ---
+# [[d1_databases]]
+# binding = "DB"
+# database_name = "jinza-db"
+# database_id = "<D1 database id>"
+# migrations_dir = "migrations"
+#
+# [[r2_buckets]]
+# binding = "PREVIEWS"
+# bucket_name = "jinza-previews"
+#
+# [[r2_buckets]]
+# binding = "DELIVERY"
+# bucket_name = "jinza-delivery"
+
+# Secrets (never here): wrangler secret put STRIPE_SECRET_KEY / STRIPE_WEBHOOK_SECRET /
+#   PAYPAL_CLIENT_ID / PAYPAL_CLIENT_SECRET
