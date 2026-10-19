@@ -90,3 +90,8 @@ function fromPrice() {
   const prices = LICENSES.filter(l => l.priceCents != null).map(l => l.priceCents);
   return money(Math.min(...prices));
 }
+
+/* Node/CJS interop for scripts/seed.mjs (harmless when loaded as a classic browser script). */
+if (typeof module !== "undefined" && module.exports) {
+  module.exports = { LICENSES, BEATS, getBeat, getLicense, money, fromPrice };
+}

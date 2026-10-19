@@ -1,5 +1,5 @@
-# JINZA Beat Store — Cloudflare Pages config
-name = "jinza-beats"
+# YSJ Studio Beat Store — Cloudflare Pages config
+name = "ysj-studio"
 compatibility_date = "2026-10-01"
 
 [vars]
@@ -8,20 +8,25 @@ SITE_URL = "http://localhost:8788"
 DOWNLOAD_TOKEN_TTL_MINUTES = "30"
 DOWNLOAD_MAX_USES = "5"
 
-# --- Bindings (uncomment + fill ids when resources are created) ---
-# [[d1_databases]]
-# binding = "DB"
-# database_name = "jinza-db"
-# database_id = "<D1 database id>"
-# migrations_dir = "migrations"
-#
-# [[r2_buckets]]
-# binding = "PREVIEWS"
-# bucket_name = "jinza-previews"
-#
-# [[r2_buckets]]
-# binding = "DELIVERY"
-# bucket_name = "jinza-delivery"
+# --- Bindings ---
+[[d1_databases]]
+binding = "DB"
+database_name = "jinza-db"
+database_id = "<FILL AFTER PROVISIONING>" # paste from: npx wrangler d1 create jinza-db
+migrations_dir = "migrations"
 
-# Secrets (never here): wrangler secret put STRIPE_SECRET_KEY / STRIPE_WEBHOOK_SECRET /
-#   PAYPAL_CLIENT_ID / PAYPAL_CLIENT_SECRET
+[[r2_buckets]]
+binding = "PREVIEWS"
+bucket_name = "jinza-previews" # public bucket: covers + tagged preview MP3s
+
+[[r2_buckets]]
+binding = "DELIVERY"
+bucket_name = "jinza-delivery" # PRIVATE bucket: full masters, stems
+
+# Secrets (NEVER in this file — use `wrangler secret put <NAME>`):
+#   ADMIN_SESSION_SECRET        (admin login session signing)
+#   R2_ACCOUNT_ID               (for presigned download URLs)
+#   R2_S3_ACCESS_KEY_ID         (R2 API token)
+#   R2_S3_SECRET_ACCESS_KEY     (R2 API token secret)
+#   STRIPE_SECRET_KEY / STRIPE_WEBHOOK_SECRET / STRIPE_PUBLISHABLE_KEY   (M4)
+#   PAYPAL_CLIENT_ID / PAYPAL_CLIENT_SECRET                              (M5)

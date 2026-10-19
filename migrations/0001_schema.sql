@@ -28,9 +28,9 @@ CREATE TABLE licenses (
   id              TEXT PRIMARY KEY,          -- e.g. 'lic_red_handed_basic'
   beat_id         TEXT NOT NULL REFERENCES beats(id),
   tier            TEXT NOT NULL
-                  CHECK (tier IN ('basic','premium','exclusive')), -- labels TBD by owner
+                  CHECK (tier IN ('mp3','wav','stems','exclusive')), -- owner-approved 2026-10-19
   name            TEXT NOT NULL,             -- display name, owner-approved
-  price_cents     INTEGER NOT NULL CHECK (price_cents >= 0),
+  price_cents     INTEGER CHECK (price_cents IS NULL OR price_cents >= 0), -- NULL = offer-only (exclusive)
   currency        TEXT NOT NULL DEFAULT 'usd',
   exclusive       INTEGER NOT NULL DEFAULT 0, -- 0/1
   terms_version   TEXT NOT NULL,             -- FK to license_terms.version active at sale
