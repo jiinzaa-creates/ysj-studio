@@ -13,7 +13,7 @@ const LICENSES = [
 const BEATS = [
   {
     slug: "red-handed", title: "RED HANDED",
-    genre: "Dark Trap", mood: "Dark, Ambient", bpm: null, key: null,
+    genre: "Emo Trap", mood: "Dark, Ambient", bpm: null, key: null,
     pocket: "Melodic R&B pocket — Future × Lil Baby × PartyNextDoor",
     cover: "assets/covers/red-handed.jpg", preview: "assets/previews/red-handed.mp3",
     featured: true, isNew: false,
@@ -34,7 +34,7 @@ const BEATS = [
   },
   {
     slug: "winters-coming", title: "Winters Coming Cmin",
-    genre: null, mood: null, bpm: null, key: "C minor", pocket: null,
+    genre: "Alt-R&B", mood: null, bpm: null, key: "C minor", pocket: null,
     cover: "assets/covers/winters-coming.jpg", preview: "assets/previews/winters-coming.mp3",
     featured: false, isNew: false,
   },
@@ -46,37 +46,37 @@ const BEATS = [
   },
   {
     slug: "tides", title: "Tides",
-    genre: null, mood: null, bpm: null, key: null, pocket: null,
+    genre: "Dark Trap", mood: null, bpm: null, key: null, pocket: null,
     cover: "assets/covers/tides.jpg", preview: "assets/previews/tides.mp3",
     featured: false, isNew: true,
   },
   {
     slug: "money-not-toxic", title: "Money not toxic",
-    genre: null, mood: null, bpm: null, key: null, pocket: null,
+    genre: "Ambient Rap", mood: null, bpm: null, key: null, pocket: null,
     cover: "assets/covers/money-not-toxic.jpg", preview: "assets/previews/money-not-toxic.mp3",
     featured: false, isNew: false,
   },
   {
     slug: "on-god", title: "On god",
-    genre: null, mood: null, bpm: null, key: null, pocket: null,
+    genre: "Dark Trap", mood: null, bpm: null, key: null, pocket: null,
     cover: "assets/covers/on-god.jpg", preview: "assets/previews/on-god.mp3",
     featured: false, isNew: false,
   },
   {
     slug: "design-of-it", title: "Design of it",
-    genre: null, mood: null, bpm: null, key: null, pocket: null,
+    genre: "Ambient Rap", mood: null, bpm: null, key: null, pocket: null,
     cover: "assets/covers/design-of-it.jpg", preview: "assets/previews/design-of-it.mp3",
     featured: false, isNew: false,
   },
   {
     slug: "war", title: "War",
-    genre: null, mood: null, bpm: null, key: null, pocket: null,
+    genre: "Dark Trap", mood: null, bpm: null, key: null, pocket: null,
     cover: "assets/covers/war.jpg", preview: "assets/previews/war.mp3",
     featured: false, isNew: false,
   },
   {
     slug: "be-smooth", title: "Be Smooth",
-    genre: null, mood: null, bpm: null, key: null, pocket: null,
+    genre: "Dark Trap", mood: null, bpm: null, key: null, pocket: null,
     cover: "assets/covers/be-smooth.jpg", preview: "assets/previews/be-smooth.mp3",
     featured: false, isNew: false,
   },
