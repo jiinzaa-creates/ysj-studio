@@ -2,7 +2,8 @@
  * - Injects header/footer (brand: YSJ Studio business / JINZA artist)
  * - Void (dark) / Bone (light) theme toggle, persisted; honors prefers-reduced-motion
  * - Crate (cart) in localStorage; checkout buttons are UI-only until M4/M5
- * - One-at-a-time audio previews
+ * - Audio previews are driven by the shared web player (player.js); card
+ *   buttons carry data-play-slug and the player syncs their state
  */
 (function () {
   "use strict";
@@ -148,41 +149,11 @@
     toastTimer = setTimeout(function () { el.classList.remove("show"); }, 2600);
   }
 
-  /* ---------- audio: one at a time ---------- */
-  var currentAudio = null;
-  function hookPlayers(root) {
-    (root || document).querySelectorAll("audio[data-preview]").forEach(function (audio) {
-      audio.addEventListener("play", function () {
-        if (currentAudio && currentAudio !== audio) currentAudio.pause();
-        currentAudio = audio;
-        document.querySelectorAll(".play-btn.playing").forEach(function (b) {
-          if (b.dataset.target !== audio.id) { b.classList.remove("playing"); b.setAttribute("aria-label", "Play preview"); }
-        });
-        var btn = document.querySelector('.play-btn[data-target="' + audio.id + '"]');
-        if (btn) { btn.classList.add("playing"); btn.setAttribute("aria-label", "Pause preview"); }
-      });
-      audio.addEventListener("pause", function () {
-        var btn = document.querySelector('.play-btn[data-target="' + audio.id + '"]');
-        if (btn) { btn.classList.remove("playing"); btn.setAttribute("aria-label", "Play preview"); }
-        if (currentAudio === audio) currentAudio = null;
-      });
-    });
-    document.addEventListener("click", function (e) {
-      var btn = e.target.closest(".play-btn");
-      if (!btn || !btn.dataset.target) return;
-      var audio = document.getElementById(btn.dataset.target);
-      if (!audio) return;
-      if (audio.paused) { audio.play().catch(function () {}); }
-      else audio.pause();
-    });
-  }
-
   /* ---------- beat cards ---------- */
   function metaChip(label, value) {
     return '<span class="chip"><span class="chip-k">' + label + "</span> " + (value == null ? "—" : value) + "</span>";
   }
-  function beatCard(b, i) {
-    var audioId = "pv-" + b.slug + "-" + i;
+  function beatCard(b) {
     return (
       '<article class="beat-card">' +
         '<a class="beat-art" href="beat.html?slug=' + b.slug + '" aria-label="Open ' + b.title + '">' +
@@ -196,8 +167,7 @@
           '<h3><a href="beat.html?slug=' + b.slug + '">' + b.title + "</a></h3>" +
           '<div class="chips">' + metaChip("BPM", b.bpm) + metaChip("Key", b.key) + (b.genre ? '<span class="chip genre">' + b.genre + "</span>" : "") + "</div>" +
           '<div class="beat-row">' +
-            '<button class="play-btn" data-target="' + audioId + '" aria-label="Play preview"><span aria-hidden="true">▶</span></button>' +
-            '<audio id="' + audioId + '" data-preview preload="none" src="' + b.preview + '"></audio>' +
+            '<button class="play-btn" data-play-slug="' + b.slug + '" aria-label="Play preview"><span aria-hidden="true">▶</span></button>' +
             '<span class="from-price">from ' + fromPrice() + "</span>" +
             '<a class="btn small" href="beat.html?slug=' + b.slug + '">License</a>' +
           "</div>" +
@@ -210,7 +180,7 @@
     el.innerHTML = beats.length
       ? beats.map(beatCard).join("")
       : '<p class="empty">No beats match. Try clearing the filters.</p>';
-    hookPlayers(el);
+    if (window.YSJPlayer) YSJPlayer.syncButtons(el);
   }
 
   /* ---------- init ---------- */
@@ -218,7 +188,6 @@
     initTheme();
     injectChrome();
     updateCrateBadge();
-    hookPlayers(document);
   });
 
   window.YSJ = {
