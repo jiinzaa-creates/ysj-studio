@@ -52,7 +52,7 @@
     return (
       '<div class="wrap header-inner">' +
         '<a class="brand" href="index.html" aria-label="YSJ Studio home">' +
-          '<span class="brand-mark"><video src="assets/logos/oni-animated.mp4" poster="assets/logos/oni-poster.jpg" muted loop playsinline autoplay aria-hidden="true"></video></span>' +
+          '<span class="brand-mark"><img src="assets/logos/skull-sm.jpg" alt="" aria-hidden="true"></span>' +
           '<span class="brand-word">YSJ <span>Studio</span></span>' +
         "</a>" +
         '<nav class="nav" aria-label="Primary">' + links + "</nav>" +
@@ -70,7 +70,7 @@
     return (
       '<div class="wrap footer-grid">' +
         '<div class="footer-brand">' +
-          '<span class="brand-mark sm"><video src="assets/logos/oni-animated.mp4" poster="assets/logos/oni-poster.jpg" muted loop playsinline autoplay aria-hidden="true"></video></span>' +
+          '<span class="brand-mark sm"><img src="assets/logos/skull-sm.jpg" alt="" aria-hidden="true"></span>' +
           "<p><strong>YSJ Studio</strong><br>Original production. Your next record.<br>" +
           '<span class="credit">Produced by JINZA | YSJ Studio</span></p>' +
         "</div>" +
@@ -91,12 +91,6 @@
     var f = document.getElementById("site-footer");
     if (h) h.innerHTML = headerHTML(map[page] || "");
     if (f) f.innerHTML = footerHTML();
-    // Reduced motion: never autoplay the oni mark; show poster instead.
-    if (reduceMotion) {
-      document.querySelectorAll(".brand-mark video").forEach(function (v) {
-        v.removeAttribute("autoplay"); v.pause();
-      });
-    }
     var toggle = document.getElementById("nav-toggle");
     var mnav = document.getElementById("mobile-nav");
     if (toggle && mnav) {

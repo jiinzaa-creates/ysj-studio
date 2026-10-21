@@ -87,6 +87,13 @@ const BEATS = [
     cover: "assets/covers/overzelous.jpg", preview: "assets/previews/overzelous.mp3",
     featured: false, isNew: true,
   },
+  {
+    slug: "hypnotic", title: "HYPNOTIC",
+    genre: "Emo Trap", mood: null, bpm: null, key: null,
+    pocket: "Juice WRLD type beat",
+    cover: "assets/covers/hypnotic.jpg", preview: "assets/previews/hypnotic.mp3",
+    featured: false, isNew: true,
+  },
 ];
 
 function getBeat(slug) { return BEATS.find(b => b.slug === slug) || null; }
