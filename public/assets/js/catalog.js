@@ -82,14 +82,14 @@ const BEATS = [
   },
   {
     slug: "overzelous", title: "OVERZELOUS",
-    genre: "Emo Trap", mood: null, bpm: null, key: null,
+    genre: "Emo Trap", mood: null, bpm: 93, key: "D minor",
     pocket: "Juice WRLD type beat",
     cover: "assets/covers/overzelous.jpg", preview: "assets/previews/overzelous.mp3",
     featured: false, isNew: true,
   },
   {
     slug: "hypnotic", title: "HYPNOTIC",
-    genre: "Emo Trap", mood: null, bpm: null, key: null,
+    genre: "Emo Trap", mood: null, bpm: 120, key: "D minor",
     pocket: "Juice WRLD type beat",
     cover: "assets/covers/hypnotic.jpg", preview: "assets/previews/hypnotic.mp3",
     featured: false, isNew: true,
