@@ -52,7 +52,7 @@
     return (
       '<div class="wrap header-inner">' +
         '<a class="brand" href="index.html" aria-label="YSJ Studio home">' +
-          '<span class="brand-mark"><img src="assets/logos/skull-sm.jpg" alt="" aria-hidden="true"></span>' +
+          '<span class="brand-mark"><img src="assets/logos/skull-sm.jpg?v=2" alt="" aria-hidden="true"></span>' +
           '<span class="brand-word">YSJ <span>Studio</span></span>' +
         "</a>" +
         '<nav class="nav" aria-label="Primary">' + links + "</nav>" +
@@ -70,7 +70,7 @@
     return (
       '<div class="wrap footer-grid">' +
         '<div class="footer-brand">' +
-          '<span class="brand-mark sm"><img src="assets/logos/skull-sm.jpg" alt="" aria-hidden="true"></span>' +
+          '<span class="brand-mark sm"><img src="assets/logos/skull-sm.jpg?v=2" alt="" aria-hidden="true"></span>' +
           "<p><strong>YSJ Studio</strong><br>Original production. Your next record.<br>" +
           '<span class="credit">Produced by JINZA | YSJ Studio</span></p>' +
         "</div>" +
