@@ -40,7 +40,7 @@ const BEATS = [
   },
   {
     slug: "soaking", title: "Soaking",
-    genre: null, mood: null, bpm: null, key: null, pocket: null,
+    genre: "Ambient Rap", mood: null, bpm: null, key: null, pocket: null,
     cover: "assets/covers/soaking.jpg", preview: "assets/previews/soaking.mp3",
     featured: false, isNew: true,
   },
