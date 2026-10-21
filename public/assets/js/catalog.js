@@ -80,6 +80,13 @@ const BEATS = [
     cover: "assets/covers/be-smooth.jpg", preview: "assets/previews/be-smooth.mp3",
     featured: false, isNew: false,
   },
+  {
+    slug: "overzelous", title: "OVERZELOUS",
+    genre: "Emo Trap", mood: null, bpm: null, key: null,
+    pocket: "Juice WRLD type beat",
+    cover: "assets/covers/overzelous.jpg", preview: "assets/previews/overzelous.mp3",
+    featured: false, isNew: true,
+  },
 ];
 
 function getBeat(slug) { return BEATS.find(b => b.slug === slug) || null; }
