@@ -2,8 +2,8 @@
  * One <audio> element + one persistent bottom bar drive every preview on the
  * site (index, catalog, beat pages). Card/detail play buttons carry
  * data-play-slug and are synced from the audio element's real state, reusing
- * the existing .play-btn.playing hook. Only the 30s preview files referenced
- * by catalog.js are ever played.
+ * the existing .play-btn.playing hook. Plays each beat's full-length tagged
+ * stream (catalog.js `full`), falling back to its 30s preview.
  * Session continuity: {slug, currentTime, wasPlaying} in sessionStorage; on
  * load the track is restored cued at its position (autoplay attempted only if
  * it was playing, rejection handled silently).
@@ -159,7 +159,7 @@
     if (!hasBeats() || i < 0 || i >= BEATS.length) return;
     idx = i;
     var b = beat();
-    audio.src = b.preview;
+    audio.src = b.full || b.preview;
     els.cover.src = b.cover;
     els.cover.alt = b.title + " cover art";
     els.title.textContent = b.title;
