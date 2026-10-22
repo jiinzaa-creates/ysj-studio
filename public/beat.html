@@ -26,7 +26,7 @@
 <div id="toast" role="status" aria-live="polite"></div>
 <script src="assets/js/catalog.js?v=4"></script>
 <script src="assets/js/site.js?v=3"></script>
-<script src="assets/js/player.js?v=4"></script>
+<script src="assets/js/player.js?v=5"></script>
 <script>
 document.addEventListener("DOMContentLoaded", function () {
   var slug = new URLSearchParams(location.search).get("slug");
@@ -64,7 +64,7 @@ document.addEventListener("DOMContentLoaded", function () {
         '<div class="meta-table">' + cell("BPM", b.bpm) + cell("Key", b.key) + cell("Genre", b.genre) + cell("Mood", b.mood) + "</div>" +
         '<div class="player"><div class="player-row">' +
           '<button class="play-btn" data-play-slug="' + b.slug + '" aria-label="Play preview"><span aria-hidden="true">▶</span></button>' +
-          "<div><strong>Full stream</strong><br><span class='credit'>Full-length stream, producer tag throughout · clean untagged files delivered after purchase</span></div>" +
+          "<div><strong>Full stream</strong><br><span class='credit'>Full-length stream · licensed files delivered after purchase</span></div>" +
         "</div></div>" +
         '<h2>Choose your license</h2>' +
         '<div class="license-list" role="radiogroup" aria-label="License options">' + licenseOpts + "</div>" +

@@ -2,7 +2,7 @@
  * One <audio> element + one persistent bottom bar drive every preview on the
  * site (index, catalog, beat pages). Card/detail play buttons carry
  * data-play-slug and are synced from the audio element's real state, reusing
- * the existing .play-btn.playing hook. Plays each beat's full-length tagged
+ * the existing .play-btn.playing hook. Plays each beat's full-length
  * stream (catalog.js `full`), falling back to its 30s preview.
  * Session continuity: {slug, currentTime, wasPlaying} in sessionStorage; on
  * load the track is restored cued at its position (autoplay attempted only if

@@ -46,12 +46,28 @@ def duration(path):
 
 def main():
     import sys
-    only = set(sys.argv[1:])
+    args = sys.argv[1:]
+    clean = "--clean" in args
+    only = {a for a in args if not a.startswith("--")}
     os.makedirs(OUT, exist_ok=True)
     for slug, src in SRC.items():
         if only and slug not in only:
             continue
         d = duration(src)
+        if clean:
+            # Owner direction 2026-10-22: full-length streams carry NO tag.
+            outp = f"{OUT}/{slug}.mp3"
+            r = subprocess.run(
+                ["ffmpeg", "-y", "-v", "error", "-i", src,
+                 "-af", "aresample=44100,loudnorm=I=-14:TP=-1.5:LRA=11",
+                 "-codec:a", "libmp3lame", "-b:a", "160k", outp],
+                capture_output=True, text=True)
+            if r.returncode != 0:
+                print("FAIL", slug, r.stderr[-800:])
+                raise SystemExit(1)
+            print(f"OK {slug} (clean): {d:.0f}s, "
+                  f"{os.path.getsize(outp) // 1024} KB")
+            continue
         positions = []
         t = TAG_FIRST
         while t < d - 4:
