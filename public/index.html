@@ -61,14 +61,6 @@
     <p><a class="btn ghost small" href="services.html">All services →</a></p>
   </section>
 
-  <div class="occult" aria-hidden="true">✦ ☽ ✦</div>
-
-  <section aria-labelledby="featured-h">
-    <h2 id="featured-h">Selected Work</h2>
-    <p>Listen to selected productions from the studio. Press play — everything here is produced by JINZA.</p>
-    <div class="beat-grid" id="featured-grid"></div>
-  </section>
-
   <section aria-labelledby="founder-h">
     <h2 id="founder-h">The Producer</h2>
     <p>JINZA is a Los Angeles-based producer with seven years behind the boards — and he'll work on anything. No genre limits, no lane. He built YSJ Studio as the company around the music: production up front, administration handled in-house, and every record 100% owned and cleared in one stop. ASCAP writer and publisher, with royalty affiliations across ASCAP, The MLC, and SoundExchange.</p>
@@ -87,13 +79,6 @@
 </main>
 <footer id="site-footer"></footer>
 <div id="toast" role="status" aria-live="polite"></div>
-<script src="assets/js/catalog.js?v=6"></script>
 <script src="assets/js/site.js?v=5"></script>
-<script src="assets/js/player.js?v=5"></script>
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-  YSJ.renderWorkGrid(document.getElementById("featured-grid"), BEATS.filter(function (b) { return b.featured; }));
-});
-</script>
 </body>
 </html>
