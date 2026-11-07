@@ -194,6 +194,7 @@ async function handlePost({ request, env }) {
   // MailChannels is the delivery path; D1 is only a backup.
   let emailSent = false;
   let mailError = "";
+  let mailStatus = 0; // upstream HTTP status from MailChannels (0 = network error)
   try {
     const res = await sendViaMailChannels({
       topicLabel: TOPICS[topic],
@@ -201,6 +202,7 @@ async function handlePost({ request, env }) {
       email,
       message,
     });
+    mailStatus = res.status;
     if (res.status === 202) {
       emailSent = true;
     } else {
@@ -222,6 +224,7 @@ async function handlePost({ request, env }) {
       {
         ok: false,
         error: "email_failed",
+        mail_status: mailStatus,
         detail:
           "Your message could not be sent right now. Please DM @yessirjinza on Instagram instead — and mention you tried the contact form." +
           (stored ? " (Your message was saved on our side and will be reviewed.)" : ""),
