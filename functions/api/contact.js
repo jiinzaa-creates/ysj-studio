@@ -1,26 +1,32 @@
 // POST /api/contact — contact-form endpoint (production-company site).
-// Sends the message to the studio via MailChannels (free, no API key) and,
+// Sends the message to the studio via Resend (free tier) and,
 // best-effort, stores it in D1 as a backup.
 //
-// IMPORTANT — verified 2026-11-06, read before debugging delivery:
+// IMPORTANT — read before debugging delivery:
+// - Resend sandbox rule (verified 2026-11-07): the free tier sends from
+//   onboarding@resend.dev with NO domain verification, but it ONLY
+//   delivers to the email address that owns the Resend account. The
+//   account MUST be registered with jiinzaa@gmail.com (the CONTACT_TO
+//   below), or every send fails. To send from a YSJ Studio address or to
+//   any other recipient, verify ysjstudio.run.place in Resend (DNS) and
+//   switch CONTACT_FROM to an address on it.
+// - The API key lives in Cloudflare, NOT in this repo: set it as the
+//   RESEND_API_KEY secret on the ysj-studio Pages project (dashboard ->
+//   Workers & Pages -> ysj-studio -> Settings -> Variables and Secrets).
+//   Without it, this endpoint returns 502 and the visitor is directed to
+//   DM @yessirjinza — it never reports success for a message that was
+//   not delivered.
 // - The D1 database 'jinza-db' is NOT provisioned in the production
 //   Cloudflare account (GET /api/beats returns 501 "M3 provisioning
 //   pending"). D1 storage below is therefore BEST-EFFORT: if the DB binding
 //   is missing, or the contact_messages table does not exist yet, the insert
 //   is skipped and the submission still proceeds. Apply
 //   migrations/0002_contact_messages.sql once D1 is provisioned.
-// - MailChannels needs DNS authorization for the sending domain to deliver
-//   reliably: an SPF record including relay.mailchannels.net and a
-//   _mailchannels TXT lockdown record on ysjstudio.run.place. Neither exists
-//   today (checked 2026-11-06) and DNS changes need the owner. If
-//   MailChannels rejects the message, this endpoint returns 502 and the
-//   visitor is directed to DM @yessirjinza — it never reports success for
-//   a message that was not delivered.
 // - INTERIM destination: jiinzaa@gmail.com. No business email exists yet;
 //   switch CONTACT_TO to it when one is created.
 
-const CONTACT_TO = "jiinzaa@gmail.com"; // INTERIM — see note above
-const CONTACT_FROM = "noreply@ysjstudio.run.place";
+const CONTACT_TO = "jiinzaa@gmail.com"; // INTERIM — see note above; must match the Resend account email
+const CONTACT_FROM = "onboarding@resend.dev"; // Resend sandbox sender — no domain verification, delivers only to CONTACT_TO
 const CONTACT_FROM_NAME = "YSJ Studio — Contact Form";
 
 const TOPICS = {
@@ -105,7 +111,12 @@ async function overRateLimit(env, ipHash) {
   }
 }
 
-async function sendViaMailChannels({ topicLabel, name, email, message }) {
+async function sendViaResend(env, { topicLabel, name, email, message }) {
+  const apiKey = env && env.RESEND_API_KEY ? String(env.RESEND_API_KEY) : "";
+  if (!apiKey) {
+    return new Response(JSON.stringify({ error: "RESEND_API_KEY not configured" }), { status: 502 });
+  }
+
   const body = [
     `New contact-form message — YSJ Studio`,
     ``,
@@ -119,18 +130,19 @@ async function sendViaMailChannels({ topicLabel, name, email, message }) {
     `-- Sent from the YSJ Studio contact form (www.ysjstudio.run.place/contact.html)`,
   ].join("\n");
 
-  const payload = {
-    personalizations: [{ to: [{ email: CONTACT_TO, name: "YSJ Studio" }] }],
-    from: { email: CONTACT_FROM, name: CONTACT_FROM_NAME },
-    reply_to: { email, name },
-    subject: `[YSJ Studio] ${topicLabel} — ${name}`,
-    content: [{ type: "text/plain", value: body }],
-  };
-
-  const res = await fetch("https://api.mailchannels.net/tx/v1/send", {
+  const res = await fetch("https://api.resend.com/emails", {
     method: "POST",
-    headers: { "content-type": "application/json" },
-    body: JSON.stringify(payload),
+    headers: {
+      Authorization: `Bearer ${apiKey}`,
+      "content-type": "application/json",
+    },
+    body: JSON.stringify({
+      from: `${CONTACT_FROM_NAME} <${CONTACT_FROM}>`,
+      to: [CONTACT_TO],
+      reply_to: email,
+      subject: `[YSJ Studio] ${topicLabel} — ${name}`,
+      text: body,
+    }),
     signal: AbortSignal.timeout(10000),
   });
   return res;
@@ -190,27 +202,27 @@ async function handlePost({ request, env }) {
     emailSent: false,
   };
 
-  // MailChannels is the delivery path; D1 is only a backup.
+  // Resend is the delivery path; D1 is only a backup.
   let emailSent = false;
   let mailError = "";
-  let mailStatus = 0; // upstream HTTP status from MailChannels (0 = network error)
+  let mailStatus = 0; // upstream HTTP status from Resend (0 = network error)
   try {
-    const res = await sendViaMailChannels({
+    const res = await sendViaResend(env, {
       topicLabel: TOPICS[topic],
       name,
       email,
       message,
     });
     mailStatus = res.status;
-    if (res.status === 202) {
+    if (res.status === 200) {
       emailSent = true;
     } else {
       mailError = await res.text().catch(() => "");
-      console.error(`[contact] MailChannels rejected (${res.status}):`, mailError.slice(0, 500));
+      console.error(`[contact] Resend rejected (${res.status}):`, mailError.slice(0, 500));
     }
   } catch (err) {
     mailError = err && err.message ? err.message : String(err);
-    console.error("[contact] MailChannels request failed:", mailError);
+    console.error("[contact] Resend request failed:", mailError);
   }
 
   row.emailSent = emailSent;
