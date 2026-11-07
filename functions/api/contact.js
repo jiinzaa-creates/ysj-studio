@@ -26,7 +26,6 @@ const CONTACT_FROM_NAME = "YSJ Studio — Contact Form";
 const TOPICS = {
   general: "General inquiry",
   custom: "Custom production",
-  "beat-licensing": "Beat licensing",
   sync: "Sync / commercial licensing",
   publishing: "Publishing administration",
   collaboration: "Collaboration",

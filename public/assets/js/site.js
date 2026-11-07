@@ -42,7 +42,6 @@
   /* ---------- header / footer ---------- */
   var NAV = [
     ["Services", "services.html"],
-    ["Work", "work.html"],
     ["About", "about.html"],
     ["Contact", "contact.html"],
   ];
@@ -74,9 +73,9 @@
           "<p><strong>YSJ Studio</strong><br>Original production. Your next record.<br>" +
           '<span class="credit">Produced by JINZA | YSJ Studio</span></p>' +
         "</div>" +
-        '<nav aria-label="Footer"><a href="services.html">Services</a><a href="work.html">Work</a>' +
+        '<nav aria-label="Footer"><a href="services.html">Services</a>' +
         '<a href="about.html">About</a><a href="contact.html">Contact</a></nav>' +
-        '<nav aria-label="More"><a href="licensing.html">Licensing</a>' +
+        '<nav aria-label="More">' +
         '<a href="privacy.html">Privacy Policy</a><a href="terms.html">Terms of Service</a></nav>' +
         '<div class="footer-social"><a href="https://instagram.com/yessirjinza" target="_blank" rel="noopener">Instagram @yessirjinza</a></div>' +
       "</div>" +
@@ -86,8 +85,8 @@
   }
   function injectChrome() {
     var page = (location.pathname.split("/").pop() || "index.html").replace(/\.html$/, "") || "index";
-    var map = { index: "index.html", services: "services.html", work: "work.html",
-                licensing: "licensing.html", about: "about.html", contact: "contact.html" };
+    var map = { index: "index.html", services: "services.html",
+                about: "about.html", contact: "contact.html" };
     var h = document.getElementById("site-header");
     var f = document.getElementById("site-footer");
     if (h) h.innerHTML = headerHTML(map[page] || "");
