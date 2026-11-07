@@ -4,11 +4,16 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Contact — YSJ Studio</title>
-<meta name="description" content="Contact YSJ Studio about beat licensing, exclusive offers, and support.">
+<meta name="description" content="Contact YSJ Studio about custom production, beat licensing, sync and commercial licensing, publishing administration, or collaboration.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Contact — YSJ Studio">
+<meta property="og:description" content="Custom production, beat licensing, sync, publishing administration, or collaboration — tell the studio what you're working on.">
+<meta property="og:url" content="https://www.ysjstudio.run.place/contact.html">
+<meta property="og:image" content="https://www.ysjstudio.run.place/assets/logos/skull.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700;800&family=Cinzel+Decorative:wght@700;900&family=IBM+Plex+Mono:wght@400;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/style.css?v=2">
+<link rel="stylesheet" href="assets/css/style.css?v=4">
 <link rel="icon" href="assets/logos/skull-sm.jpg?v=2">
 </head>
 <body>
@@ -19,70 +24,113 @@
   <div class="beat-detail" style="align-items:start">
     <div class="card">
       <h2>Send a message</h2>
-      <!-- M3: wire this form to POST /api/contact. No backend yet — submissions are not sent. -->
-      <form id="contact-form">
+      <form id="contact-form" novalidate>
         <div class="field">
           <label for="c-topic">Topic</label>
           <select id="c-topic" name="topic">
-            <option value="general">General question</option>
-            <option value="exclusive">Exclusive license offer</option>
-            <option value="support">Order support</option>
-            <option value="custom">Custom production inquiry</option>
+            <option value="general">General inquiry</option>
+            <option value="custom">Custom production</option>
+            <option value="beat-licensing">Beat licensing</option>
+            <option value="sync">Sync / commercial licensing</option>
+            <option value="publishing">Publishing administration</option>
+            <option value="collaboration">Collaboration</option>
+            <option value="support">Support</option>
           </select>
         </div>
         <div class="field">
           <label for="c-name">Your name</label>
-          <input id="c-name" name="name" type="text" autocomplete="name" required>
+          <input id="c-name" name="name" type="text" autocomplete="name" required minlength="2">
         </div>
         <div class="field">
           <label for="c-email">Email</label>
           <input id="c-email" name="email" type="email" autocomplete="email" required>
         </div>
-        <div class="field" id="beat-field" hidden>
-          <label for="c-beat">Beat</label>
-          <input id="c-beat" name="beat" type="text" readonly>
-        </div>
         <div class="field">
           <label for="c-msg">Message</label>
-          <textarea id="c-msg" name="message" rows="5" required placeholder="Tell us what you need…"></textarea>
+          <textarea id="c-msg" name="message" rows="5" required minlength="10" placeholder="Tell us what you're working on — for custom production, include your budget if you can."></textarea>
         </div>
-        <button class="btn" type="submit">Send message</button>
+        <!-- Honeypot: leave blank. Bots fill it; humans never see it. -->
+        <div class="field hp-field" aria-hidden="true">
+          <label for="c-website">Website</label>
+          <input id="c-website" name="website" type="text" autocomplete="off" tabindex="-1">
+        </div>
+        <button class="btn" type="submit" id="contact-submit">Send message</button>
       </form>
-      <div class="notice"><strong>Preview build.</strong> The contact form has no backend yet — messages aren't sent. Form handling ships in M3.</div>
+      <div class="form-status" id="form-status" role="status" aria-live="polite" hidden></div>
     </div>
     <div>
+      <div class="card">
+        <h2>What happens next</h2>
+        <p>Your message goes straight to the studio. We reply by email — usually within a few days. For custom production, tell us what you're making next and what your budget is, and we'll scope the record and quote it from there.</p>
+      </div>
       <div class="card">
         <h2>Elsewhere</h2>
         <p>The fastest way to reach JINZA is a DM:</p>
         <p><a class="btn ghost small" href="https://instagram.com/yessirjinza" target="_blank" rel="noopener">Instagram @yessirjinza</a></p>
-      </div>
-      <div class="card">
-        <h2>Exclusive offers</h2>
-        <p>Exclusive licenses are negotiated per beat — pick "Exclusive license offer" above, name the beat, and make your offer. Serious inquiries only.</p>
       </div>
     </div>
   </div>
 </main>
 <footer id="site-footer"></footer>
 <div id="toast" role="status" aria-live="polite"></div>
-<script src="assets/js/catalog.js?v=4"></script>
-<script src="assets/js/site.js?v=2"></script>
+<script src="assets/js/site.js?v=4"></script>
 <script>
 document.addEventListener("DOMContentLoaded", function () {
-  // Deep-link support: contact.html?topic=exclusive&beat=doll-house
+  // Deep-link support: contact.html?topic=custom
   var params = new URLSearchParams(location.search);
   if (params.get("topic")) {
     var sel = document.getElementById("c-topic");
     if ([].some.call(sel.options, function (o) { return o.value === params.get("topic"); })) sel.value = params.get("topic");
   }
-  if (params.get("beat")) {
-    var b = getBeat(params.get("beat"));
-    document.getElementById("beat-field").hidden = false;
-    document.getElementById("c-beat").value = b ? b.title : params.get("beat");
+
+  var form = document.getElementById("contact-form");
+  var statusEl = document.getElementById("form-status");
+  var submitBtn = document.getElementById("contact-submit");
+
+  function showStatus(kind, msg) {
+    statusEl.hidden = false;
+    statusEl.className = "form-status " + kind;
+    statusEl.textContent = msg;
   }
-  document.getElementById("contact-form").addEventListener("submit", function (e) {
+
+  form.addEventListener("submit", function (e) {
     e.preventDefault();
-    YSJ.toast("Message not sent — the contact backend ships in M3. DM @yessirjinza for now.");
+    var payload = {
+      topic: document.getElementById("c-topic").value,
+      name: document.getElementById("c-name").value.trim(),
+      email: document.getElementById("c-email").value.trim(),
+      message: document.getElementById("c-msg").value.trim(),
+      website: document.getElementById("c-website").value
+    };
+    if (payload.name.length < 2) { showStatus("error", "Please enter your name."); return; }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(payload.email)) { showStatus("error", "Please enter a valid email address."); return; }
+    if (payload.message.length < 10) { showStatus("error", "Please write a message (at least 10 characters)."); return; }
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Sending…";
+    statusEl.hidden = true;
+
+    fetch("/api/contact", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify(payload)
+    })
+      .then(function (res) { return res.json().then(function (data) { return { res: res, data: data }; }); })
+      .then(function (out) {
+        if (out.res.ok && out.data.ok) {
+          form.reset();
+          showStatus("success", "Message sent. We'll reply by email — usually within a few days. Thanks for reaching out.");
+        } else {
+          showStatus("error", (out.data && out.data.detail) || "Your message could not be sent. Please DM @yessirjinza on Instagram instead.");
+        }
+      })
+      .catch(function () {
+        showStatus("error", "Something went wrong sending your message. Please DM @yessirjinza on Instagram instead.");
+      })
+      .finally(function () {
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Send message";
+      });
   });
 });
 </script>

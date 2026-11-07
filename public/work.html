@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="void">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Work — YSJ Studio | Selected Productions</title>
+<meta name="description" content="Selected productions from YSJ Studio. Listen to the work — original productions by JINZA, including the album Everything Changes.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Work — YSJ Studio">
+<meta property="og:description" content="Selected productions from YSJ Studio. Listen to the work — original productions by JINZA.">
+<meta property="og:url" content="https://www.ysjstudio.run.place/work.html">
+<meta property="og:image" content="https://www.ysjstudio.run.place/assets/covers/everything-changes.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700;800&family=Cinzel+Decorative:wght@700;900&family=IBM+Plex+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css?v=4">
+<link rel="icon" href="assets/logos/skull-sm.jpg?v=2">
+</head>
+<body>
+<header id="site-header"></header>
+<main class="wrap">
+  <p class="eyebrow">✦ Selected Work ✦</p>
+  <h1>Hear the work.</h1>
+  <p>Selected productions from the studio. Press play on anything below — everything here is produced by JINZA.</p>
+
+  <section aria-labelledby="album-h">
+    <div class="beat-detail" style="align-items:start">
+      <div class="beat-cover-lg album-art"><img src="assets/covers/everything-changes.jpg" alt="Everything Changes album cover art by JINZA" width="1600" height="1600"></div>
+      <div class="prose">
+        <p class="eyebrow">✦ Album ✦</p>
+        <h2 id="album-h">Everything Changes</h2>
+        <p>The album from JINZA. A full-length record from the studio — the sound of YSJ Studio in one place.</p>
+        <p class="credit">JINZA — Everything Changes · Produced by JINZA | YSJ Studio</p>
+        <div class="hero-ctas">
+          <a class="btn" href="contact.html?topic=custom">Work with the studio</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="occult" aria-hidden="true">✦ ☽ ✦</div>
+
+  <section aria-labelledby="productions-h">
+    <h2 id="productions-h">Selected Productions</h2>
+    <p>Original productions from the studio catalog. Listen below — to license one for your next release, <a href="contact.html?topic=beat-licensing">inquire through the contact page</a>.</p>
+    <div class="beat-grid" id="work-grid"></div>
+  </section>
+
+  <div class="occult" aria-hidden="true">✦ ☽ ✦</div>
+
+  <section aria-labelledby="cta-h">
+    <h2 id="cta-h">Want a record like these — made for you?</h2>
+    <p>Custom production starts with a conversation: what you're making next, and what your budget is.</p>
+    <div class="hero-ctas">
+      <a class="btn" href="contact.html?topic=custom">Start a custom production</a>
+      <a class="btn ghost" href="services.html">All services</a>
+    </div>
+  </section>
+</main>
+<footer id="site-footer"></footer>
+<div id="toast" role="status" aria-live="polite"></div>
+<script src="assets/js/catalog.js?v=5"></script>
+<script src="assets/js/site.js?v=4"></script>
+<script src="assets/js/player.js?v=5"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  YSJ.renderWorkGrid(document.getElementById("work-grid"), BEATS);
+});
+</script>
+</body>
+</html>

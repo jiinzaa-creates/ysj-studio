@@ -1,10 +1,15 @@
-# JINZA — Direct Beat Sales Platform
+# YSJ Studio — Music Production Company Website
 
-Production e-commerce site for JINZA: browse beats, preview audio, choose a
-license, pay with Stripe or PayPal, receive files + license after verified payment.
+Production-company site for YSJ Studio (JINZA): services, selected work,
+licensing information, and a working contact form. No on-site store, cart,
+or payments — inquiries go through the contact form (POST /api/contact,
+MailChannels) or Instagram DM.
 
-**Status: Milestone 1** — architecture, requirements, repo structure.
-No checkout code yet. No live payments. Test/sandbox only until owner approves.
+**Status (2026-11-06):** rebuilt as a production-company site; contact form
+live via MailChannels to jiinzaa@gmail.com (interim — no business email yet).
+D1 'jinza-db' is NOT provisioned in the production Cloudflare account, so
+contact messages are email-only until D1 is provisioned and migration 0002
+is applied (see functions/api/contact.js).
 
 ## Stack
 

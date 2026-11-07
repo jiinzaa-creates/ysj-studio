@@ -1,7 +1,7 @@
-/* YSJ Studio storefront — Black & White theme (owner-approved 2026-10-21)
+/* YSJ Studio — Black & White theme (owner-approved 2026-10-21)
  * Void (dark, pitch black) default · Bone (light, white) toggle via [data-theme="bone"]
  * Palette: strictly grayscale (R=G=B) + one crimson accent, used only on:
- * crate count badge, New/Featured badges, exclusive highlights, player accents.
+ * New/Featured badges, exclusive highlights, player accents.
  */
 :root {
   --accent: #E5383B;
@@ -93,10 +93,6 @@ main { padding: 2rem 0 4rem; min-height: 60vh; }
 .icon-btn:hover { border-color: var(--ink-faint); }
 .theme-dot { width: .8em; height: .8em; border-radius: 50%; border: 1px solid var(--line);
   background: linear-gradient(135deg, #000 50%, #fff 50%); display: inline-block; }
-.crate-btn { background: var(--btn-bg); color: var(--btn-ink); border: 0; border-radius: 999px;
-  padding: .5rem 1rem; font-weight: 700; font-size: .9rem; display: inline-flex; gap: .4rem; align-items: center; }
-.crate-btn:hover { text-decoration: none; filter: brightness(1.1); }
-.crate-count { background: var(--accent); color: #fff; border-radius: 999px; padding: 0 .5em; font-family: var(--font-mono); }
 .nav-toggle { display: inline-flex; }
 .mobile-nav { display: none; flex-direction: column; padding: .5rem 4% 1rem; gap: .2rem; }
 .mobile-nav.open { display: flex; }
@@ -134,6 +130,16 @@ main { padding: 2rem 0 4rem; min-height: 60vh; }
 .notice { border: 1px dashed var(--ink-faint); border-radius: var(--radius); padding: 1rem 1.2rem;
   background: color-mix(in srgb, var(--ink) 6%, transparent); font-size: .93rem; margin: 1.2rem 0; }
 .notice strong { color: var(--ink); }
+
+/* ---------- contact form status ---------- */
+.form-status { border-radius: var(--radius); padding: 1rem 1.2rem; font-size: .93rem; margin: 1.2rem 0 0; }
+.form-status.success { border: 1px solid var(--ink-faint); background: color-mix(in srgb, var(--ink) 6%, transparent); }
+.form-status.error { border: 1px solid var(--accent); background: color-mix(in srgb, var(--accent) 12%, transparent); }
+/* Honeypot field: bots fill it, humans never see it. */
+.hp-field { position: absolute; left: -9999px; top: auto; width: 1px; height: 1px; overflow: hidden; }
+
+/* Album artwork shows as designed (its own red/black/white), not grayscaled. */
+.album-art img { filter: none; }
 
 /* ---------- hero ---------- */
 .hero { display: grid; gap: 2rem; align-items: center; padding: 2.5rem 0 1rem; }

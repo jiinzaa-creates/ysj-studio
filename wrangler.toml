@@ -1,4 +1,8 @@
-# YSJ Studio Beat Store — Cloudflare Pages config
+# YSJ Studio — production-company site (Cloudflare Pages config)
+# NOTE (2026-11-06): the D1 database 'jinza-db' is NOT provisioned in the
+# production Cloudflare account (GET /api/beats returns 501). Functions that
+# use the DB binding degrade gracefully until it is provisioned — see
+# docs/PROVISIONING.md and functions/api/contact.js.
 name = "ysj-studio"
 compatibility_date = "2026-10-01"
 

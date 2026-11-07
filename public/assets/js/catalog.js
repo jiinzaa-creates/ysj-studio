@@ -4,7 +4,7 @@
  * M3+: this file is replaced by GET /api/beats served from D1.
  */
 const LICENSES = [
-  { id: "mp3",       name: "MP3 Lease",  priceCents: 2000, deliverable: "Tagged MP3 + untagged MP3", exclusive: false },
+  { id: "mp3",       name: "MP3 Lease",  priceCents: 2000, deliverable: "Untagged MP3", exclusive: false },
   { id: "wav",       name: "WAV Lease",  priceCents: 4000, deliverable: "Untagged WAV + MP3",         exclusive: false },
   { id: "stems",     name: "Stems",      priceCents: 7500, deliverable: "Tracked-out stems + WAV + MP3", exclusive: false },
   { id: "exclusive", name: "Exclusive",  priceCents: null, deliverable: "Full package — contact to negotiate", exclusive: true },
