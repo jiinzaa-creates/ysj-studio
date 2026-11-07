@@ -151,7 +151,7 @@ main { padding: 2rem 0 4rem; min-height: 60vh; }
 .hero h1 .grad { color: var(--ink-dim); }
 .hero .tagline { font-family: var(--font-display); font-size: 1.3rem; color: var(--ink-dim); margin-bottom: 1rem; }
 .hero-ctas { display: flex; gap: .8rem; flex-wrap: wrap; margin-top: 1.4rem; }
-@media (min-width: 900px) { .hero { grid-template-columns: 1fr 1.1fr; } .hero-emblem { order: -1; } }
+@media (min-width: 900px) { .hero:has(.hero-emblem) { grid-template-columns: 1fr 1.1fr; } .hero-emblem { order: -1; } }
 
 /* ---------- beat cards ---------- */
 .beat-grid { display: grid; gap: 1.2rem; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); }
